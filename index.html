@@ -1269,6 +1269,70 @@ h2 .syl-code {
   margin-left: 8px; vertical-align: middle;
 }
 
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   SOLUTION REVEAL BLOCKS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.sol-reveal {
+  margin: 10px 0 14px;
+  border: 2px solid #8e44ad;
+  border-radius: 10px;
+  overflow: hidden;
+  animation: slideDown 0.25s ease-out;
+}
+@keyframes slideDown {
+  from { opacity:0; transform:translateY(-8px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+.sol-hdr {
+  background: linear-gradient(135deg, #8e44ad, #7b2d8b);
+  color: white;
+  padding: 9px 16px;
+  font-family: 'Kalam', cursive;
+  font-size: 18px;
+  font-weight: 700;
+}
+.sol-reveal pre.cb2 {
+  padding: 14px 16px;
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.7;
+  overflow-x: auto;
+  white-space: pre;
+  background: #1e2130;
+  color: #cdd6f4;
+  font-family: 'Courier New', monospace;
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   RESIZABLE CODE EDITORS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.sb-ed, .sandbox-editor {
+  position: relative;
+}
+.sb-ed textarea,
+.sandbox-editor textarea,
+.ce, .code-editor {
+  resize: vertical !important;
+  min-height: 140px;
+  max-height: 800px;
+  cursor: text;
+  transition: height 0.1s;
+}
+/* drag handle visual hint */
+.sb-ed::after,
+.sandbox-editor::after {
+  content: '⋮⋮';
+  position: absolute;
+  bottom: 6px;
+  right: 14px;
+  color: rgba(100,255,150,0.35);
+  font-size: 16px;
+  letter-spacing: -3px;
+  pointer-events: none;
+  line-height: 1;
+}
+
    RESPONSIVE
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 @media (max-width: 768px) {
@@ -1689,6 +1753,34 @@ print(acc.__balance)  # Try this!</textarea>
         <button class="run-btn" onclick="runCode('sb1')">▶ Run Code</button>
         <button class="reset-btn" onclick="resetCode('sb1', 'default1')">↺ Reset</button>
         <span style="color:#a8b2d8;font-size:14px">📌 Notice the AttributeError for private attributes!</span>
+      
+    <button class="rb" style="background:linear-gradient(135deg,#8e44ad,#7b2d8b);margin-top:4px" onclick="toggleSandboxSol('sol-sb1')">💡 Show Solution</button>
+    <div id="sol-sb1" class="sol-reveal" style="display:none">
+      <div class="sol-hdr">📋 Model Solution — SB1</div>
+      <div style="padding:10px 14px;background:#eaf4fb;font-size:14px;border-left:4px solid #1b98e0">💡 sb1 already has the complete BankAccount class. It demonstrates all 3 access levels. Uncomment the last line to see the AttributeError!</div>
+      <pre class="cb2" style="margin:0;border-radius:0 0 8px 8px;border-left:4px solid #8e44ad">class BankAccount:
+    def __init__(self, owner, balance):
+        self.owner = owner          # public
+        self._bank = &quot;IBDP Bank&quot;   # protected
+        self.__balance = balance    # private
+
+    def deposit(self, amount):
+        if amount &gt; 0:
+            self.__balance += amount
+            print(f&quot;Deposited ${amount}. Balance: ${self.__balance}&quot;)
+        else:
+            print(&quot;Amount must be positive!&quot;)
+
+    def get_balance(self):
+        return self.__balance
+
+acc = BankAccount(&quot;Alice&quot;, 1000)
+print(&quot;Owner:&quot;, acc.owner)
+print(&quot;Bank:&quot;,  acc._bank)
+acc.deposit(500)
+print(&quot;Balance:&quot;, acc.get_balance())
+# print(acc.__balance)  # Uncomment to see AttributeError!</pre>
+    </div>
       </div>
       <div class="sandbox-output" id="sb1-output">
         <div class="output-label">▸ Output will appear here...</div>
@@ -1754,6 +1846,37 @@ print(f"{s.name} - Grade: {s.get_grade()} - Letter: {s.get_letter()}")</textarea
         <button class="run-btn" onclick="runCode('sb2')">▶ Run Code</button>
         <button class="reset-btn" onclick="resetCode('sb2', 'challenge1')">↺ Reset</button>
         <button class="run-btn" style="background:linear-gradient(135deg,#8e44ad,#9b59b6)" onclick="showSolution('sol1')">💡 Show Solution</button>
+      
+    <button class="rb" style="background:linear-gradient(135deg,#8e44ad,#7b2d8b);margin-top:4px" onclick="toggleSandboxSol('sol-sb2')">💡 Show Solution</button>
+    <div id="sol-sb2" class="sol-reveal" style="display:none">
+      <div class="sol-hdr">📋 Model Solution — SB2</div>
+      <div style="padding:10px 14px;background:#eaf4fb;font-size:14px;border-left:4px solid #1b98e0">💡 Student class with private __grade, validation in set_grade(), and letter grade lookup.</div>
+      <pre class="cb2" style="margin:0;border-radius:0 0 8px 8px;border-left:4px solid #8e44ad">class Student:
+    def __init__(self, name, grade):
+        self.name = name
+        self.__grade = grade
+
+    def set_grade(self, g):
+        if 0 &lt;= g &lt;= 100:
+            self.__grade = g
+        else:
+            print(&quot;Cannot set grade: out of range!&quot;)
+
+    def get_grade(self):
+        return self.__grade
+
+    def get_letter(self):
+        if self.__grade &gt;= 90: return &quot;A&quot;
+        elif self.__grade &gt;= 80: return &quot;B&quot;
+        elif self.__grade &gt;= 70: return &quot;C&quot;
+        elif self.__grade &gt;= 60: return &quot;D&quot;
+        else: return &quot;F&quot;
+
+s = Student(&quot;Alice&quot;, 87)
+print(f&quot;{s.name} - Grade: {s.get_grade()} - Letter: {s.get_letter()}&quot;)
+s.set_grade(105)
+print(f&quot;{s.name} - Grade: {s.get_grade()} - Letter: {s.get_letter()}&quot;)</pre>
+    </div>
       </div>
       <div class="sandbox-output" id="sb2-output">
         <div class="output-label">▸ Output will appear here...</div>
@@ -2000,6 +2123,39 @@ for a in animals:
       </div>
       <div class="sandbox-controls">
         <button class="run-btn" onclick="runCode('sb3')">▶ Run Code</button>
+      
+    <button class="rb" style="background:linear-gradient(135deg,#8e44ad,#7b2d8b);margin-top:4px" onclick="toggleSandboxSol('sol-sb3')">💡 Show Solution</button>
+    <div id="sol-sb3" class="sol-reveal" style="display:none">
+      <div class="sol-hdr">📋 Model Solution — SB3</div>
+      <div style="padding:10px 14px;background:#eaf4fb;font-size:14px;border-left:4px solid #1b98e0">💡 Animal → Dog inheritance using super().__init__() and method overriding.</div>
+      <pre class="cb2" style="margin:0;border-radius:0 0 8px 8px;border-left:4px solid #8e44ad">class Animal:
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+
+    def eat(self):
+        print(f&quot;{self.name} is eating&quot;)
+
+    def speak(self):
+        print(f&quot;{self.name} makes a sound&quot;)
+
+class Dog(Animal):
+    def __init__(self, name, age, breed):
+        super().__init__(name, age)  # call parent __init__
+        self.breed = breed
+
+    def speak(self):                 # override
+        print(f&quot;{self.name} says: Woof!&quot;)
+
+    def fetch(self):
+        print(f&quot;{self.name} fetches the ball!&quot;)
+
+d = Dog(&quot;Rex&quot;, 3, &quot;Labrador&quot;)
+d.eat()    # inherited
+d.speak()  # overridden
+d.fetch()  # Dog-only
+print(f&quot;{d.name} is {d.age} yrs, breed: {d.breed}&quot;)</pre>
+    </div>
       </div>
       <div class="sandbox-output" id="sb3-output">
         <div class="output-label">▸ Output will appear here...</div>
@@ -2126,9 +2282,28 @@ for a in animals:
       </table>
     </div>
 
-    <div style="margin:10px 0">
+    <div style="margin:10px 0;display:flex;align-items:center;gap:12px;flex-wrap:wrap">
       <button class="check-q-btn" onclick="checkTrace1()">✅ Mark My Trace Table</button>
-      <span id="trace1-score" style="margin-left:14px;font-family:'Caveat',cursive;font-size:22px"></span>
+      <button class="check-q-btn" style="background:linear-gradient(135deg,#8e44ad,#7b2d8b)" onclick="toggleTraceSol('trace1-sol')">💡 Show Solution</button>
+      <span id="trace1-score" style="font-family:'Caveat',cursive;font-size:22px"></span>
+    </div>
+    <div id="trace1-sol" style="display:none;margin:12px 0;background:#f8f9fa;border:2px solid #8e44ad;border-radius:10px;overflow:hidden">
+      <div style="background:#8e44ad;color:white;padding:8px 16px;font-weight:700;font-size:14px;letter-spacing:1px">📋 COMPLETE SOLUTION — Trace Table 1</div>
+      <div style="overflow-x:auto;padding:12px">
+      <table class="trace-table" style="width:100%">
+        <tr><th>Step</th><th>Statement</th><th>Line</th><th>c1.count</th><th>Output</th></tr>
+        <tr style="background:#e8f5e9"><td>1</td><td>c1 = Counter(5)</td><td>A</td><td><strong>5</strong></td><td>—</td></tr>
+        <tr style="background:#e8f5e9"><td>2</td><td>c1.increment()</td><td>B</td><td><strong>6</strong> (5+1)</td><td>—</td></tr>
+        <tr style="background:#e8f5e9"><td>3</td><td>c1.increment(3)</td><td>B</td><td><strong>9</strong> (6+3)</td><td>—</td></tr>
+        <tr style="background:#e8f5e9"><td>4</td><td>c1.display()</td><td>D</td><td>9</td><td><strong>Count: 9</strong></td></tr>
+        <tr style="background:#e8f5e9"><td>5</td><td>c1.reset()</td><td>C</td><td><strong>0</strong></td><td>—</td></tr>
+        <tr style="background:#e8f5e9"><td>6</td><td>c1.increment(2)</td><td>B</td><td><strong>2</strong> (0+2)</td><td>—</td></tr>
+        <tr style="background:#e8f5e9"><td>7</td><td>c1.display()</td><td>D</td><td>2</td><td><strong>Count: 2</strong></td></tr>
+      </table>
+      <div style="margin-top:10px;padding:8px 12px;background:#d5f5e3;border-radius:6px;font-size:14px">
+        <strong>Key logic:</strong> Step 1 sets count=5. Step 2 adds 1 (default n=1) → 6. Step 3 adds 3 → 9. Step 5 resets to 0. Step 6 adds 2 → 2.
+      </div>
+      </div>
     </div>
 
     <h2>🔍 Trace Table Exercise 2 — Two Objects<span class="syl-ref syl-sl">B3.1.4</span></h2>
@@ -2186,9 +2361,27 @@ for a in animals:
       </table>
     </div>
 
-    <div style="margin:10px 0">
+    <div style="margin:10px 0;display:flex;align-items:center;gap:12px;flex-wrap:wrap">
       <button class="check-q-btn" onclick="checkTrace2()">✅ Mark Trace Table 2</button>
-      <span id="trace2-score" style="margin-left:14px;font-family:'Caveat',cursive;font-size:22px"></span>
+      <button class="check-q-btn" style="background:linear-gradient(135deg,#8e44ad,#7b2d8b)" onclick="toggleTraceSol('trace2-sol')">💡 Show Solution</button>
+      <span id="trace2-score" style="font-family:'Caveat',cursive;font-size:22px"></span>
+    </div>
+    <div id="trace2-sol" style="display:none;margin:12px 0;background:#f8f9fa;border:2px solid #8e44ad;border-radius:10px;overflow:hidden">
+      <div style="background:#8e44ad;color:white;padding:8px 16px;font-weight:700;font-size:14px;letter-spacing:1px">📋 COMPLETE SOLUTION — Trace Table 2</div>
+      <div style="overflow-x:auto;padding:12px">
+      <table class="trace-table" style="width:100%">
+        <tr><th>Step</th><th>Statement</th><th>a.width</th><th>a.height</th><th>b.width</th><th>b.height</th><th>Output</th></tr>
+        <tr style="background:#e8f5e9"><td>1</td><td>a = Box(3,4)</td><td><strong>3</strong></td><td><strong>4</strong></td><td>—</td><td>—</td><td>—</td></tr>
+        <tr style="background:#e8f5e9"><td>2</td><td>b = Box(5,2)</td><td>3</td><td>4</td><td><strong>5</strong></td><td><strong>2</strong></td><td>—</td></tr>
+        <tr style="background:#e8f5e9"><td>3</td><td>print(a.area())</td><td>3</td><td>4</td><td>5</td><td>2</td><td><strong>12</strong> (3×4)</td></tr>
+        <tr style="background:#e8f5e9"><td>4</td><td>a.double()</td><td><strong>6</strong> (3×2)</td><td>4</td><td>5</td><td>2</td><td>—</td></tr>
+        <tr style="background:#e8f5e9"><td>5</td><td>print(a.area())</td><td>6</td><td>4</td><td>5</td><td>2</td><td><strong>24</strong> (6×4)</td></tr>
+        <tr style="background:#e8f5e9"><td>6</td><td>print(b.area())</td><td>6</td><td>4</td><td>5</td><td>2</td><td><strong>10</strong> (5×2)</td></tr>
+      </table>
+      <div style="margin-top:10px;padding:8px 12px;background:#d5f5e3;border-radius:6px;font-size:14px">
+        <strong>Key logic:</strong> double() only changes <em>a</em>'s width (a.width *= 2 → 3×2=6). b is unchanged. area() = width × height for each object.
+      </div>
+      </div>
     </div>
 
     <div class="pnum">B3.1 — Page 5</div>
@@ -2382,6 +2575,38 @@ car3.describe()</textarea>
       </div>
       <div class="sandbox-controls">
         <button class="run-btn" onclick="runCode('sb4')">▶ Run Code</button>
+      
+    <button class="rb" style="background:linear-gradient(135deg,#8e44ad,#7b2d8b);margin-top:4px" onclick="toggleSandboxSol('sol-sb4')">💡 Show Solution</button>
+    <div id="sol-sb4" class="sol-reveal" style="display:none">
+      <div class="sol-hdr">📋 Model Solution — SB4</div>
+      <div style="padding:10px 14px;background:#eaf4fb;font-size:14px;border-left:4px solid #1b98e0">💡 Car class. brake() uses max(0, ...) so speed never goes negative.</div>
+      <pre class="cb2" style="margin:0;border-radius:0 0 8px 8px;border-left:4px solid #8e44ad">class Car:
+    def __init__(self, brand, colour, speed):
+        self.brand  = brand
+        self.colour = colour
+        self.speed  = speed
+
+    def accelerate(self, amount):
+        self.speed += amount
+        print(f&quot;Speed: {self.speed} km/h&quot;)
+
+    def brake(self, amount):
+        self.speed = max(0, self.speed - amount)
+        print(f&quot;Speed: {self.speed} km/h&quot;)
+
+    def honk(self):
+        print(f&quot;{self.brand} goes: Beep beep!&quot;)
+
+    def describe(self):
+        print(f&quot;{self.brand} ({self.colour}) — {self.speed} km/h&quot;)
+
+car = Car(&quot;Toyota&quot;, &quot;Red&quot;, 0)
+car.describe()
+car.accelerate(60)
+car.brake(20)
+car.honk()
+car.brake(200)  # stops at 0</pre>
+    </div>
       </div>
       <div class="sandbox-output" id="sb4-output">
         <div class="output-label">▸ Output will appear here...</div>
@@ -2597,6 +2822,47 @@ acc.display()</textarea>
       <div class="sandbox-controls">
         <button class="run-btn" onclick="runCode('sb5')">▶ Run Code</button>
         <button class="run-btn" style="background:linear-gradient(135deg,#8e44ad,#9b59b6)" onclick="showSolution('sol2')">💡 Solution</button>
+      
+    <button class="rb" style="background:linear-gradient(135deg,#8e44ad,#7b2d8b);margin-top:4px" onclick="toggleSandboxSol('sol-sb5')">💡 Show Solution</button>
+    <div id="sol-sb5" class="sol-reveal" style="display:none">
+      <div class="sol-hdr">📋 Model Solution — SB5</div>
+      <div style="padding:10px 14px;background:#eaf4fb;font-size:14px;border-left:4px solid #1b98e0">💡 BankAccount with class attribute interest_rate (shared), private balance, and apply_interest().</div>
+      <pre class="cb2" style="margin:0;border-radius:0 0 8px 8px;border-left:4px solid #8e44ad">class BankAccount:
+    interest_rate = 0.05
+
+    def __init__(self, owner, balance):
+        self.__owner   = owner
+        self.__balance = balance
+
+    def deposit(self, amt):
+        if amt &gt; 0:
+            self.__balance += amt
+            print(f&quot;Deposited: £{amt:.2f}&quot;)
+
+    def withdraw(self, amt):
+        if 0 &lt; amt &lt;= self.__balance:
+            self.__balance -= amt
+            print(f&quot;Withdrawn: £{amt:.2f}&quot;)
+        else:
+            print(&quot;Insufficient funds!&quot;)
+
+    def apply_interest(self):
+        interest = self.__balance * BankAccount.interest_rate
+        self.__balance += interest
+        print(f&quot;Interest added: £{interest:.2f}&quot;)
+
+    def get_balance(self):
+        return self.__balance
+
+    def __str__(self):
+        return f&quot;Account({self.__owner}, £{self.__balance:.2f})&quot;
+
+a = BankAccount(&quot;Alice&quot;, 1000)
+a.deposit(500)
+a.withdraw(200)
+a.apply_interest()
+print(a)</pre>
+    </div>
       </div>
       <div class="sandbox-output" id="sb5-output">
         <div class="output-label">▸ Output will appear here...</div>
@@ -2742,6 +3008,47 @@ print(f"Toyota is an ElectricCar? {isinstance(fleet[0], ElectricCar)}")</textare
       </div>
       <div class="sandbox-controls">
         <button class="run-btn" onclick="runCode('sb6')">▶ Run Code</button>
+      
+    <button class="rb" style="background:linear-gradient(135deg,#8e44ad,#7b2d8b);margin-top:4px" onclick="toggleSandboxSol('sol-sb6')">💡 Show Solution</button>
+    <div id="sol-sb6" class="sol-reveal" style="display:none">
+      <div class="sol-hdr">📋 Model Solution — SB6</div>
+      <div style="padding:10px 14px;background:#eaf4fb;font-size:14px;border-left:4px solid #1b98e0">💡 Vehicle → Car → ElectricCar hierarchy using super() at each level.</div>
+      <pre class="cb2" style="margin:0;border-radius:0 0 8px 8px;border-left:4px solid #8e44ad">class Vehicle:
+    total_vehicles = 0
+
+    def __init__(self, make, model, year):
+        self.__make  = make
+        self.__model = model
+        self.year    = year
+        Vehicle.total_vehicles += 1
+
+    def get_make(self):  return self.__make
+    def get_model(self): return self.__model
+
+    def describe(self):
+        print(f&quot;{self.year} {self.__make} {self.__model}&quot;)
+
+class Car(Vehicle):
+    def __init__(self, make, model, year, doors):
+        super().__init__(make, model, year)
+        self.doors = doors
+
+    def describe(self):
+        super().describe()
+        print(f&quot;  Doors: {self.doors}&quot;)
+
+class ElectricCar(Car):
+    def __init__(self, make, model, year, doors, range_km):
+        super().__init__(make, model, year, doors)
+        self.range_km = range_km
+
+    def describe(self):
+        super().describe()
+        print(f&quot;  Range: {self.range_km}km&quot;)
+
+ElectricCar(&quot;Tesla&quot;, &quot;Model 3&quot;, 2024, 4, 500).describe()
+print(f&quot;Total vehicles: {Vehicle.total_vehicles}&quot;)</pre>
+    </div>
       </div>
       <div class="sandbox-output" id="sb6-output">
         <div class="output-label">▸ Output will appear here...</div>
@@ -2859,6 +3166,39 @@ for s in shapes:
       <div class="sandbox-controls">
         <button class="run-btn" onclick="runCode('sb7')">▶ Run Code</button>
         <button class="run-btn" style="background:linear-gradient(135deg,#8e44ad,#9b59b6)" onclick="showSolution('sol3')">💡 Solution</button>
+      
+    <button class="rb" style="background:linear-gradient(135deg,#8e44ad,#7b2d8b);margin-top:4px" onclick="toggleSandboxSol('sol-sb7')">💡 Show Solution</button>
+    <div id="sol-sb7" class="sol-reveal" style="display:none">
+      <div class="sol-hdr">📋 Model Solution — SB7</div>
+      <div style="padding:10px 14px;background:#eaf4fb;font-size:14px;border-left:4px solid #1b98e0">💡 Shape hierarchy demonstrating polymorphism — same describe() call, different area/perimeter per shape.</div>
+      <pre class="cb2" style="margin:0;border-radius:0 0 8px 8px;border-left:4px solid #8e44ad">import math
+
+class Shape:
+    def area(self):      return 0
+    def perimeter(self): return 0
+    def describe(self):
+        print(f&quot;{self.__class__.__name__}: Area={self.area():.2f}, Perim={self.perimeter():.2f}&quot;)
+
+class Circle(Shape):
+    def __init__(self, r): self.r = r
+    def area(self):      return math.pi * self.r ** 2
+    def perimeter(self): return 2 * math.pi * self.r
+
+class Rectangle(Shape):
+    def __init__(self, w, h): self.w = w; self.h = h
+    def area(self):      return self.w * self.h
+    def perimeter(self): return 2 * (self.w + self.h)
+
+class Triangle(Shape):
+    def __init__(self, a, b, c): self.a=a; self.b=b; self.c=c
+    def area(self):
+        s = (self.a+self.b+self.c)/2
+        return math.sqrt(s*(s-self.a)*(s-self.b)*(s-self.c))
+    def perimeter(self): return self.a+self.b+self.c
+
+for shape in [Circle(5), Rectangle(4,6), Triangle(3,4,5)]:
+    shape.describe()</pre>
+    </div>
       </div>
       <div class="sandbox-output" id="sb7-output">
         <div class="output-label">▸ Output will appear here...</div>
@@ -3247,6 +3587,35 @@ print("Balance:", acc.get_balance())
 # print(acc.__balance)</textarea></div>
       <div class="sb-ctrl">
         <button class="rb" onclick="runSB('sb-encap1')">▶ Run Code</button>
+      
+    <button class="rb" style="background:linear-gradient(135deg,#8e44ad,#7b2d8b);margin-top:4px" onclick="toggleSandboxSol('sol-sb-encap1')">💡 Show Solution</button>
+    <div id="sol-sb-encap1" class="sol-reveal" style="display:none">
+      <div class="sol-hdr">📋 Model Solution — SB-ENCAP1</div>
+      <div style="padding:10px 14px;background:#eaf4fb;font-size:14px;border-left:4px solid #1b98e0">💡 Complete BankAccount with all three access levels. Uncomment last line to see name mangling in action.</div>
+      <pre class="cb2" style="margin:0;border-radius:0 0 8px 8px;border-left:4px solid #8e44ad">class BankAccount:
+    def __init__(self, owner, balance):
+        self.owner = owner          # public
+        self._bank = &quot;IBDP Bank&quot;   # protected
+        self.__balance = balance    # private — stored as _BankAccount__balance
+
+    def deposit(self, amount):
+        if amount &gt; 0:
+            self.__balance += amount
+            print(f&quot;Deposited £{amount}. Balance: £{self.__balance}&quot;)
+        else:
+            print(&quot;Amount must be positive!&quot;)
+
+    def get_balance(self):
+        return self.__balance
+
+acc = BankAccount(&quot;Alice&quot;, 1000)
+print(&quot;Owner:&quot;, acc.owner)
+print(&quot;Bank:&quot;,  acc._bank)
+acc.deposit(500)
+print(&quot;Balance:&quot;, acc.get_balance())
+# print(acc.__balance)   # ❌ AttributeError
+# print(acc._BankAccount__balance)  # ⚠️ name-mangled form — works!</pre>
+    </div>
       </div>
       <div class="sb-out" id="sb-encap1-out"><span style="color:#4a5568">▸ Output appears here...</span></div>
     </div>
@@ -3518,7 +3887,48 @@ inventory[0].sell(2)  # Sell 2 laptops
 inventory[1].sell(60) # Try to sell 60 mice (will fail)</textarea></div>
     <div class="sb-ctrl">
       <button class="rb" onclick="runSB('sb-array1')">▶ Run Code</button>
+    
+    <button class="rb" style="background:linear-gradient(135deg,#8e44ad,#7b2d8b);margin-top:4px" onclick="toggleSandboxSol('sol-sb-array1')">💡 Show Solution</button>
+    <div id="sol-sb-array1" class="sol-reveal" style="display:none">
+      <div class="sol-hdr">📋 Model Solution — SB-ARRAY1</div>
+      <div style="padding:10px 14px;background:#eaf4fb;font-size:14px;border-left:4px solid #1b98e0">💡 Product inventory — create objects, loop to display, filter low stock, restock, sell.</div>
+      <pre class="cb2" style="margin:0;border-radius:0 0 8px 8px;border-left:4px solid #8e44ad">class Product:
+    def __init__(self, name, price, stock):
+        self.name  = name
+        self.price = price
+        self.stock = stock
+
+    def sell(self, qty):
+        if qty &lt;= self.stock:
+            self.stock -= qty
+            print(f&quot;Sold {qty}x {self.name}&quot;)
+        else:
+            print(f&quot;Not enough stock for {self.name}!&quot;)
+
+    def restock(self, qty):
+        self.stock += qty
+        print(f&quot;Restocked {self.name}: +{qty}&quot;)
+
+inventory = [
+    Product(&quot;Laptop&quot;,   999.99, 5),
+    Product(&quot;Mouse&quot;,     29.99, 50),
+    Product(&quot;Keyboard&quot;,  49.99, 3),
+    Product(&quot;Monitor&quot;,  299.99, 8),
+    Product(&quot;USB Hub&quot;,   19.99, 2),
+]
+
+for p in inventory:
+    print(f&quot;{p.name}: £{p.price} — {p.stock} in stock&quot;)
+
+low = [p for p in inventory if p.stock &lt; 5]
+print(f&quot;\nLow stock ({len(low)} items):&quot;)
+for p in low:
+    p.restock(10)
+
+inventory[0].sell(2)
+inventory[1].sell(60)</pre>
     </div>
+      </div>
     <div class="sb-out" id="sb-array1-out"><span style="color:#4a5568">▸ Output appears here...</span></div>
   </div>
 
@@ -3682,7 +4092,38 @@ print("We can add NEW payment methods without changing checkout()!")
 print("As long as they have process_payment(), they work!")</textarea></div>
     <div class="sb-ctrl">
       <button class="rb" onclick="runSB('sb-duck')">▶ Run Code</button>
+    
+    <button class="rb" style="background:linear-gradient(135deg,#8e44ad,#7b2d8b);margin-top:4px" onclick="toggleSandboxSol('sol-sb-duck')">💡 Show Solution</button>
+    <div id="sol-sb-duck" class="sol-reveal" style="display:none">
+      <div class="sol-hdr">📋 Model Solution — SB-DUCK</div>
+      <div style="padding:10px 14px;background:#eaf4fb;font-size:14px;border-left:4px solid #1b98e0">💡 Duck typing — CreditCard, PayPal, BankTransfer all have .pay() so they all work with process_payment().</div>
+      <pre class="cb2" style="margin:0;border-radius:0 0 8px 8px;border-left:4px solid #8e44ad">class CreditCard:
+    def __init__(self, holder, limit):
+        self.holder = holder
+        self.limit  = limit
+    def pay(self, amount):
+        if amount &lt;= self.limit:
+            print(f&quot;CreditCard [{self.holder}]: £{amount:.2f}&quot;)
+        else:
+            print(&quot;Limit exceeded!&quot;)
+
+class PayPal:
+    def __init__(self, email): self.email = email
+    def pay(self, amount):
+        print(f&quot;PayPal [{self.email}]: £{amount:.2f}&quot;)
+
+class BankTransfer:
+    def __init__(self, acc): self.acc = acc
+    def pay(self, amount):
+        print(f&quot;Transfer [{self.acc}]: £{amount:.2f}&quot;)
+
+def process_payment(method, amount):
+    method.pay(amount)  # duck typing!
+
+for m in [CreditCard(&quot;Alice&quot;,5000), PayPal(&quot;bob@x.com&quot;), BankTransfer(&quot;GB29-1234&quot;)]:
+    process_payment(m, 49.99)</pre>
     </div>
+      </div>
     <div class="sb-out" id="sb-duck-out"><span style="color:#4a5568">▸ Output appears here...</span></div>
   </div>
 
@@ -4101,7 +4542,49 @@ print("\n✓ All subscribers notified automatically!")
 print("✓ Stock doesn't need to know WHO is observing - it just notifies everyone")</textarea></div>
     <div class="sb-ctrl">
       <button class="rb" onclick="runSB('sb-observer')">▶ Run Code</button>
+    
+    <button class="rb" style="background:linear-gradient(135deg,#8e44ad,#7b2d8b);margin-top:4px" onclick="toggleSandboxSol('sol-sb-observer')">💡 Show Solution</button>
+    <div id="sol-sb-observer" class="sol-reveal" style="display:none">
+      <div class="sol-hdr">📋 Model Solution — SB-OBSERVER</div>
+      <div style="padding:10px 14px;background:#eaf4fb;font-size:14px;border-left:4px solid #1b98e0">💡 Observer pattern — StockMarket notifies all Investor/AlertSystem subscribers on price change.</div>
+      <pre class="cb2" style="margin:0;border-radius:0 0 8px 8px;border-left:4px solid #8e44ad">class Observer:
+    def update(self, event, data): pass
+
+class Subject:
+    def __init__(self):  self._observers = []
+    def subscribe(self, o):   self._observers.append(o)
+    def unsubscribe(self, o): self._observers.remove(o)
+    def notify(self, event, data):
+        for o in self._observers: o.update(event, data)
+
+class StockMarket(Subject):
+    def __init__(self, name):
+        super().__init__()
+        self.name  = name
+        self.price = 0
+    def set_price(self, price):
+        self.price = price
+        self.notify(&quot;price_change&quot;, {&quot;stock&quot;: self.name, &quot;price&quot;: price})
+
+class Investor(Observer):
+    def __init__(self, name): self.name = name
+    def update(self, event, data):
+        print(f&quot;{self.name}: {data[&#x27;stock&#x27;]} = £{data[&#x27;price&#x27;]:.2f}&quot;)
+
+class AlertSystem(Observer):
+    def __init__(self, threshold): self.threshold = threshold
+    def update(self, event, data):
+        if data[&quot;price&quot;] &gt; self.threshold:
+            print(f&quot;ALERT: {data[&#x27;stock&#x27;]} &gt; £{self.threshold}!&quot;)
+
+m = StockMarket(&quot;AAPL&quot;)
+m.subscribe(Investor(&quot;Alice&quot;))
+m.subscribe(Investor(&quot;Bob&quot;))
+m.subscribe(AlertSystem(150))
+m.set_price(148.50)
+m.set_price(155.00)</pre>
     </div>
+      </div>
     <div class="sb-out" id="sb-observer-out"><span style="color:#4a5568">▸ Output appears here...</span></div>
   </div>
 
@@ -4777,6 +5260,28 @@ p2.greet()</textarea>
       </div>
       <div class="sandbox-controls">
         <button class="run-btn" onclick="runCode('sb8')">▶ Run Code</button>
+      
+    <button class="rb" style="background:linear-gradient(135deg,#8e44ad,#7b2d8b);margin-top:4px" onclick="toggleSandboxSol('sol-sb8')">💡 Show Solution</button>
+    <div id="sol-sb8" class="sol-reveal" style="display:none">
+      <div class="sol-hdr">📋 Model Solution — SB8</div>
+      <div style="padding:10px 14px;background:#eaf4fb;font-size:14px;border-left:4px solid #1b98e0">💡 Person class with private __name and __age, getters, and greet() method.</div>
+      <pre class="cb2" style="margin:0;border-radius:0 0 8px 8px;border-left:4px solid #8e44ad">class Person:
+    def __init__(self, name, age):
+        self.__name = name
+        self.__age  = age
+
+    def get_name(self): return self.__name
+    def get_age(self):  return self.__age
+
+    def greet(self):
+        print(f&quot;Hi! I&#x27;m {self.__name} and I&#x27;m {self.__age} years old.&quot;)
+
+p1 = Person(&quot;Alice&quot;, 17)
+p2 = Person(&quot;Bob&quot;, 18)
+p1.greet()
+p2.greet()
+print(f&quot;{p1.get_name()} older: {p1.get_age() &gt; p2.get_age()}&quot;)</pre>
+    </div>
       </div>
       <div class="sandbox-output" id="sb8-output">
         <div class="output-label">▸ Output will appear here...</div>
@@ -4924,6 +5429,22 @@ function markCell(inputId, expected) {
     el.placeholder = exp;
     return 0;
   }
+}
+
+function toggleSandboxSol(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  if (el.style.display === 'none') {
+    el.style.display = 'block';
+  } else {
+    el.style.display = 'none';
+  }
+}
+
+function toggleTraceSol(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.style.display = el.style.display === 'none' ? 'block' : 'none';
 }
 
 function checkTrace1() {
